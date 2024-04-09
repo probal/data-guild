@@ -1,0 +1,102 @@
+version: "3.9"
+services:
+  ### Prefect Database
+  database:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=prefect_handson;
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/data/postgresql/data
+    profiles: ["orion"]
+
+  ### MinIO for flow storage
+#  minio:
+#    image: minio/minio:latest
+#    entrypoint:
+#      [
+#        "minio",
+#        "server",
+#        "--address",
+#        "0.0.0.0:9000",
+#        "--console-address",
+#        "0.0.0.0:9001",
+#        "/data",
+#      ]
+#    volumes:
+#      - "minio:/data"
+#    ports:
+#      - 9000:9000
+#      - 9001:9001
+#    profiles: ["minio"]
+
+  ### Prefect Orion API
+  orion:
+    image: prefect:latest
+    restart: always
+    volumes:
+      - prefect:/root/.prefect
+    entrypoint: ["prefect", "orion", "start"]
+    environment:
+      - PREFECT_ORION_API_HOST=0.0.0.0
+      - PREFECT_ORION_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:postgres@database:5432/prefect_handson
+      - PREFECT_API_URL=http://localhost:4300/api
+    ports:
+      - 4300:4200
+    depends_on:
+      - database
+    profiles: ["orion"]
+    build:
+      context: .
+      args:
+        ENVIRONMENT: dev
+      #when building
+      shm_size: 1gb
+      #when running
+    shm_size: 1gb
+
+  ## Prefect Agent
+  agent:
+    image: prefect:latest
+    restart: always
+    entrypoint: ["prefect", "agent", "start", "-q", "default"]
+    volumes:
+      - ".:/app"
+    environment:
+      - PREFECT_API_URL=http://orion:4200/api
+    ports:
+      - 8786:8787
+    profiles: ["agent"]
+    build:
+      context: .
+      args:
+        ENVIRONMENT: dev
+      shm_size: 1gb
+    shm_size: 1gb
+
+  ### Prefect CLI
+  cli:
+    image: prefect:latest
+    entrypoint: "bash"
+    volumes:
+      - ".:/app"
+    environment:
+      - PREFECT_API_URL=http://orion:4200/api
+    profiles: ["cli"]
+    build:
+      context: .
+      args:
+        ENVIRONMENT: dev
+      shm_size: 1gb
+    shm_size: 1gb
+
+volumes:
+  prefect:
+  db:
+networks:
+  default:
+    name: prefect-handson
