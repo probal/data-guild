@@ -7,43 +7,23 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=prefect_handson;
+      - POSTGRES_DB=prefect_hands_on;
     ports:
       - 5432:5432
     volumes:
       - db:/data/postgresql/data
     profiles: ["orion"]
 
-  ### MinIO for flow storage
-#  minio:
-#    image: minio/minio:latest
-#    entrypoint:
-#      [
-#        "minio",
-#        "server",
-#        "--address",
-#        "0.0.0.0:9000",
-#        "--console-address",
-#        "0.0.0.0:9001",
-#        "/data",
-#      ]
-#    volumes:
-#      - "minio:/data"
-#    ports:
-#      - 9000:9000
-#      - 9001:9001
-#    profiles: ["minio"]
-
-  ### Prefect Orion API
+  ### Prefect Orion(Server) API
   orion:
     image: prefect:latest
     restart: always
     volumes:
       - prefect:/root/.prefect
-    entrypoint: ["prefect", "orion", "start"]
+    entrypoint: ["prefect", "server", "start"]
     environment:
-      - PREFECT_ORION_API_HOST=0.0.0.0
-      - PREFECT_ORION_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:postgres@database:5432/prefect_handson
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://postgres:postgres@database:5432/prefect_hands_on
       - PREFECT_API_URL=http://localhost:4300/api
     ports:
       - 4300:4200
@@ -54,10 +34,6 @@ services:
       context: .
       args:
         ENVIRONMENT: dev
-      #when building
-      shm_size: 1gb
-      #when running
-    shm_size: 1gb
 
   ## Prefect Agent
   agent:
@@ -75,8 +51,6 @@ services:
       context: .
       args:
         ENVIRONMENT: dev
-      shm_size: 1gb
-    shm_size: 1gb
 
   ### Prefect CLI
   cli:
@@ -91,12 +65,10 @@ services:
       context: .
       args:
         ENVIRONMENT: dev
-      shm_size: 1gb
-    shm_size: 1gb
 
 volumes:
   prefect:
   db:
 networks:
   default:
-    name: prefect-handson
+    name: prefect-hands_on

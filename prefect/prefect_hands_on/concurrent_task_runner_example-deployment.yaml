@@ -1,0 +1,49 @@
+###
+### A complete description of a Prefect Deployment for flow 'concurrent-task-runner-example'
+###
+name: default
+description: null
+version: ea875d6a0bb1895e61c1ded6e3649bf0
+# The work queue that will handle this deployment's runs
+work_queue_name: default
+work_pool_name: default-agent-pool
+tags: []
+parameters: {}
+schedule: null
+schedules: []
+is_schedule_active: null
+infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: concurrent-task-runner-example
+manifest_path: null
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  _block_document_id: 612fa49e-277d-4b20-80cf-e65cc5a81e65
+  _block_document_name: anonymous-bc7209db-3acb-4170-a53a-4e1231c64dfd
+  _is_anonymous: true
+  block_type_slug: process
+  _block_type_slug: process
+storage: null
+path: /Users/mrityunjoy/Documents/Projects/data-guild/prefect/prefect_hands_on
+entrypoint: flows/concurrent_task_runner_example.py:concurrent_task_runner_example
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties:
+    task_runner_class:
+      position: 0
+      title: task_runner_class
+  required: null
+  definitions: null
+timestamp: '2024-04-26T11:09:54.642904+00:00'
+triggers: []
+enforce_parameter_schema: null
