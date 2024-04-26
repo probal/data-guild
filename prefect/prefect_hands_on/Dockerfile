@@ -1,5 +1,5 @@
 # Use Prefect image as a base
-FROM prefecthq/prefect:2.11.3-python3.10
+FROM prefecthq/prefect:2.18-python3.11
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1

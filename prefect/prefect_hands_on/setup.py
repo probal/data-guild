@@ -1,12 +1,15 @@
 from setuptools import setup, find_packages
 
 # Function to read the lines of the requirements.txt file
+
+
 def read_requirements():
     with open('requirements.txt', 'r') as req:
         content = req.read()
         requirements = content.split('\n')
 
     return requirements
+
 
 setup(
     name='prefect_hands_on',

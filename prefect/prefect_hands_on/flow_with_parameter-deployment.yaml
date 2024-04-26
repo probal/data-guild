@@ -1,0 +1,56 @@
+###
+### A complete description of a Prefect Deployment for flow 'flow-with-parameter'
+###
+name: default
+description: null
+version: b28739a1ed500cf8d0f3607ed7e0fd43
+# The work queue that will handle this deployment's runs
+work_queue_name: default
+work_pool_name: default-agent-pool
+tags: []
+parameters: {}
+schedule: null
+schedules: []
+is_schedule_active: null
+infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: flow-with-parameter
+manifest_path: null
+infrastructure:
+  type: process
+  env: {}
+  labels: {}
+  name: null
+  command: null
+  stream_output: true
+  working_dir: null
+  _block_document_id: 17247b4a-add2-4d5d-b3b2-0060f324d697
+  _block_document_name: anonymous-d876c777-7725-4d5b-899a-327f8b29a4a3
+  _is_anonymous: true
+  block_type_slug: process
+  _block_type_slug: process
+storage: null
+path: /Users/mrityunjoy/Documents/Projects/data-guild/prefect/prefect_hands_on
+entrypoint: flows/flow_with_parameter.py:flow_with_parameter
+parameter_openapi_schema:
+  title: Parameters
+  type: object
+  properties:
+    a:
+      position: 0
+      title: a
+      type: integer
+    b:
+      position: 1
+      title: b
+      type: integer
+  required:
+  - a
+  - b
+  definitions: null
+timestamp: '2024-04-26T11:10:19.406683+00:00'
+triggers: []
+enforce_parameter_schema: null
